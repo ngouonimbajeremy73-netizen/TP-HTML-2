@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
+            color: #1f2f49;
+            padding-top: 92px;
+            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        a,
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        .container {
+            width: min(100% - 32px, 1200px);
+            margin: 0 auto;
+        }
+
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: black;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #d9e3f2;
+            z-index: 1000;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+        }
+
+
+        .header-inner {
+            min-height: 92px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: black;
+            min-width: 0;
+        }
+
+        .logo {
+            width: 56px;
+            height: 56px;
+            flex: 0 0 56px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #2f5aa8, #6fa4ff);
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 10px 18px rgba(47, 90, 168, 0.18);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .brand-text strong {
+            font-size: 16px;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .brand-text span {
+            font-size: 13px;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 999px;
+            transition: 0.3s ease;
+        }
+        @media(max-width:861px){
+            .nav a{
+                color: black;
+            }
+        }
+        .nav a:hover,
+        .nav a:focus-visible {
+            background: #e8f1ff;
+            color: #2f5aa8;
+            outline: none;
+        }
+
+        .menu-checkbox {
+            display: none;
+        }
+
+        .menu-toggle {
+            display: none;
+            width: 48px;
+            height: 48px;
+            border: 1px solid #d9e3f2;
+            border-radius: 14px;
+            background: #ffffff;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+
+
+
+        .menu-toggle span,
+        .menu-toggle::before,
+        .menu-toggle::after {
+            content: "";
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: #24324a;
+            border-radius: 999px;
+            transition: 0.3s ease;
+            position: relative;
+        }
+
+        .menu-toggle::before {
+            position: absolute;
+            transform: translateY(-6px);
+        }
+
+        .menu-toggle::after {
+            position: absolute;
+            transform: translateY(6px);
+        }
+
+        .menu-checkbox:checked~.menu-toggle span {
+            opacity: 0;
+        }
+
+        .menu-checkbox:checked~.menu-toggle::before {
+            transform: rotate(45deg);
+        }
+
+        .menu-checkbox:checked~.menu-toggle::after {
+            transform: rotate(-45deg);
+        }
+
+        .hero {
+            padding: clamp(24px, 4vw, 40px) 0 clamp(34px, 5vw, 52px);
+        }
+
+        .hero-box {
+            min-height: 500px;
+            border: 1px solid #dde7f5;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+            align-items: center;
+            gap: clamp(20px, 4vw, 34px);
+            padding: clamp(18px, 3vw, 30px);
+            box-shadow: 0 14px 30px rgba(24, 48, 87, 0.08);
+            overflow: hidden;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: #2c2c2c;
+            border: 1px solid #d6e4fb;
+            color: black;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 22px;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2rem, 5vw, 3.35rem);
+            line-height: 1.12;
+            margin-bottom: 18px;
+            color: black;
+            max-width: 12ch;
+        }
+
+        .hero-content p {
+            font-size: clamp(1rem, 2vw, 1.125rem);
+            line-height: 1.8;
+            margin-bottom: 28px;
+            color: black;
+            max-width: 620px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 52px;
+            padding: 14px 24px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s ease;
+            border: 1px solid transparent;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: black;
+            color: white;
+            box-shadow: 0 10px 20px rgba(47, 90, 168, 0.2);
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 24px rgba(47, 90, 168, 0.26);
+            outline: none;
+            background-color: #e8f1ff;
+            color: #2f5aa8;
+            border: solid 1px black;
+        }
+
+        .btn-secondary {
+            border-color: black;
+            color: black;
+            background: #ffffff;
+        }
+
+        .btn-secondary:hover,
+        .btn-secondary:focus-visible {
+            background: #f3f8ff;
+            outline: none;
+            background-color: #e8f1ff;
+            color: #2f5aa8;
+            border: solid 1px blue;
+        }
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .hero-stat {
+            min-width: 0;
+            padding: 16px;
+            border-radius: 16px;
+            background-color:black;
+            
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.04);
+        }
+
+        .hero-stat strong {
+            display: block;
+            font-size: clamp(1.2rem, 2vw, 1.45rem);
+            color: white;
+            margin-bottom: 6px;
+        }
+
+        .hero-stat span {
+            font-size: 13px;
+            line-height: 1.5;
+            color: white;
+        }
+
+        .hero-visual {
+            position: relative;
+            min-height: 440px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-image-wrap {
+            position: relative;
+            width: 100%;
+            max-width: 470px;
+            aspect-ratio: 47 / 43;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(26, 47, 82, 0.16);
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+
+        .floating-card {
+            position: absolute;
+            z-index: 2;
+            max-width: 210px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #e2ebf8;
+            border-radius: 18px;
+            padding: 14px 16px;
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.08);
+        }
+
+        .floating-card.top {
+            top: 24px;
+            left: 0;
+        }
+
+        .floating-card.bottom {
+            right: 0;
+            bottom: 24px;
+        }
+
+        .floating-card strong {
+            display: block;
+            font-size: 18px;
+            color: black;
+            margin-bottom: 4px;
+        }
+
+        .floating-card span {
+            font-size: 13px;
+            color: #607089;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-box {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-content h1 {
+                max-width: none;
+            }
+
+            .hero-visual {
+                min-height: auto;
+                padding-top: 10px;
+            }
+
+            .hero-image-wrap {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 860px) {
+            body {
+                padding-top: 84px;
+            }
+
+            .header-inner {
+                min-height: 84px;
+            }
+
+            .menu-toggle {
+                display: inline-flex;
+                position: relative;
+                z-index: 1002;
+            }
+
+
+            .nav {
+                position: fixed;
+                top: 84px;
+                left: 16px;
+                right: 16px;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+                padding: 14px;
+                color: black;
+                background: black;
+                border: 1px solid #d9e3f2;
+                border-radius: 20px;
+                box-shadow: 0 14px 30px rgba(24, 48, 87, 0.08);
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px);
+                transition: 0.3s ease;
+            }
+
+            .menu-checkbox:checked~.nav {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+
+            .nav a {
+                width: 100%;
+                text-align: center;
+                background: #f8fbff;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .container {
+                width: min(100% - 24px, 1200px);
+            }
+
+            .brand-text span {
+                display: none;
+            }
+
+            .hero-box {
+                border-radius: 22px;
+                padding: 18px;
+            }
+
+            .hero-badge {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .hero-actions .btn {
+                width: 100%;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-visual {
+                gap: 14px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .floating-card {
+                position: static;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 78px;
+}
+            .header-inner {
+                min-height: 78px;
+                gap: 12px;
+            }
+
+            .logo {
+                width: 48px;
+                height: 48px;
+                flex-basis: 48px;
+                border-radius: 14px;
+            }
+
+            .brand-text strong {
+                font-size: 15px;
+            }
+
+            .hero-image-wrap {
+                border-radius: 22px;
+            }
+        }
+          @media(max-width:414px){
+                  .rectangle2{
+                width: 30%;
+            }
+            .rectangle2 h2{
+                font-size: 14px;
+            }
+              .rectangle h2{
+           font-size: 14px;
+           }
+         
+
+         }
+        
+        .rectangle2{
+            height: 23px;
+            width: 22%;
+            border: solid 1px;
+            border-radius: 10px;
+            margin: 0 auto;
+            background-color: white;
+            color: black;
+            text-align: center;
+            font-size: 14px;
+        }
+        .rectangle4{
+            display:grid;
+
+            justify-content: space-around;
+            gap: 15px;
+             grid-template-columns: repeat(2,1fr);
+            width: 70%;
+            margin: 20px auto;
+        }
+        @media(max-width:414px){
+            .rectangle4{
+                grid-template-columns: repeat(1,1fr);
+            }
+        }
+
+        .rectangle3{
+            color: black;
+            height: 200px;
+            border: solid 1px;
+            width: 85%;
+            border: 2px solid black;
+            border-radius: 10px;
+            padding-left: 10px;
+            background-color: white;
+
+        }
+        .rectangle6{
+            display: grid;
+
+            justify-content: space-around;
+            border: solid 1px black;
+            gap: 15px;
+             grid-template-columns: repeat(3,1fr);
+            width: 70%;
+            margin: 20px auto;
+
+        }
+          @media(max-width:1024px){
+            .rectangle6{
+                grid-template-columns: repeat(2,1fr);
+            }
+         }
+
+         @media(max-width:414px){
+            .rectangle6{
+                grid-template-columns: repeat(1,1fr);
+            }
+         }
+
+        .rectangle7{
+            height: 200px;
+            width: 80%;
+            border: 2px solid black;
+            color: black;
+            border-radius: 10px;
+            background-color: white;
+             padding: 5px;
+        }
+        .rectangle7 img{
+            height: 80px;
+            width: 100%;
+            overflow: hidden;
+            object-fit: cover;
+
+        }
+        .rectangle{
+            height: 22px;
+            width: 20%;
+
+            border-radius: 10px;
+            margin: 0 auto;
+            background-color: white;
+            color: black;
+            text-align: center;
+            font-size: 14px;
+        }
+        .rectangle8{
+            display:grid;
+            justify-content: space-around;
+            width: 70%;
+             grid-template-columns: repeat(4,1fr);
+            margin: 20px auto;
+        }
+        .rectangle9{
+            height: 100px;
+            width: 80%;
+           text-align: center;
+           border: solid 1px black;
+           color: black;
+            border-radius: 8px;
+            background-color: white;
+
+        }
+        @media(max-width:1024px){
+            .rectangle8{
+                grid-template-columns: repeat(2,1fr);
+            }
+        }
+        @media(max-width:414px){
+            .rectangle8{
+                grid-template-columns: repeat(1,1fr);
+            }
+        }
+        .rectangle10{
+            height: 150px;
+            width: 70%;
+            border-radius: 10px;
+            margin: 20px auto;
+
+
+        }
+        .c{
+            height: 150px;
+            width: 90px;
+            margin-left: 10px;
+        }
+        .cercle{
+            width: 10%;
+            justify-content: space-around;
+            display: flex;
+            margin: 0 auto;
+        }
+        .cercle1{
+            height: 10px;
+            width: 10px;
+            background-color: white;
+            border-radius: 50%;
+        }
+        .footer{
+            height: 40px;
+            width: 70%;
+            color: black;
+            background-color: white;
+            border-radius: 8px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .rectangle2 h2{
+            margin-top: -4px;
+        }
+         .rectangle2 h2{
+            margin-top: -3px;
+        }
+        .rectangle h2{
+            margin-top: - 5px;
+        }
+        .bombocla{
+            background-color: black;
+        }
+        
+     
+        
+        
+    </style>
+</head>
+<body>
+   <div class="bombocla">
+    <header class="header">
+        <div class="container header-inner">
+
+            
+            <a href="#accueil" class="brand">
+                <div class="logo"><img src="ng.jpg" width="60px" style="border-radius: 10px;"></div>
+                <div class="brand-text">
+                    <strong>Glenn Jeremy</strong>
+                    <span>Portfolio étudiant / People</span>
+                </div>
+            </a>
+
+            <input type="checkbox" id="menuToggle" class="menu-checkbox" />
+
+            <label for="menuToggle" class="menu-toggle" aria-label="Ouvrir le menu">
+                <span></span>
+            </label>
+
+         
+            <nav class="nav">
+                <a href="vacance.html">Accueil</a>
+                <a href="code.html">À propos</a>
+                <a href="BLOC3.html">Projets</a>
+                <a href="#profil">Profil</a>
+                <a href="contacte.html">Contact</a>
+            </nav>
+
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="accueil">
+            <div class="container">
+                <div class="hero-box">
+                   
+                    <div class="hero-content">
+                        <div class="hero-badge">💻Portfolio moderne & évolutif</div>
+
+                        <h1>Construire mon parcours avec passion, créativité et ambition</h1>
+
+                        <p>
+                            Bonjour, je suis Glenn, étudiante passionnée par l'IT,
+                            l'apprentissage et la création d'interfaces modernes.
+                        </p>
+
+                        <div class="hero-actions">
+                            <a href="#projets" class="btn btn-primary">Voir mes projets</a>
+                            <a href="#contact" class="btn btn-secondary">Me contacter</a>
+                        </div>
+
+                        <div class="hero-stats">
+                            <div class="hero-stat">
+                                <strong>5+</strong>
+                                <span>Projets réalisés</span>
+                            </div>
+                            <div class="hero-stat">
+                                <strong>100%</strong>
+                                <span>Motivation & progression</span>
+                            </div>
+                            <div class="hero-stat">
+                                <strong>UI</strong>
+                                <span>Design & web moderne</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Partie droite -->
+                    <div class="hero-visual">
+                        <div class="floating-card top">
+                            <strong>Créativité</strong>
+                            <span>Idées claires et visuelles</span>
+                        </div>
+
+                        <div class="hero-image-wrap">
+                            <img class="hero-image" src="jrm.png" alt="Etudiant">
+                        </div>
+
+                        <div class="floating-card bottom">
+                            <strong>Apprentissage</strong>
+                            <span>Évolution continue</span>
+                        </div>
+                    </div>
+        </div>    
+    <div class="rectangle2"><h2>A propos de moi</h2></div>
+    <div class="rectangle4">
+        <div class="rectangle3"><h3>Mon parcours</h3><br><p>Étudiant polyvalent avec un parcours axé sur l’analyse et la gestion de projets. Curieux et adaptable, il développe des compétences variées et s’intéresse aux environnements dynamiques. Motivé, il cherche constamment à apprendre et à relever de nouveaux défis.</p></div>
+        <div class="rectangle3"><h3>Mes objetifs</h3><br><p>Développer continuellement mes compétences académiques et professionnelles, acquérir une solide expérience sur le terrain, et évoluer progressivement vers des postes à responsabilité. Mon objectif est de m’intégrer dans un environnement dynamique où je pourrai relever des défis, innover et contribuer efficacement à la réussite des projets.</p></div>
+        <div class="rectangle3"><h3>Mes qualités</h3><br><p>Motivé, rigoureux et organisé, avec un bon esprit d’analyse. Adaptable et curieux, je sais apprendre rapidement et m’intégrer facilement dans un environnement de travail. Fiable, avec un bon sens des responsabilités et du travail en équipe.</p></div>
+        <div class="rectangle3"><h3>Ce que je recherche</h3><br><p>Je recherche un environnement de travail ’apprentissage, la collaboration et la progression professionnelle, tout en me donnant l’opportunité de relever de nouveaux défis et d’apporter une réelle contribution.</p></div>
+    </div>
+    <div class="rectangle2"><h2>Mes projets</h2></div>
+    <div class="rectangle6">
+        <div class="rectangle7">
+         <img src="sql.jpg">
+         <h3>Gestion</h3>
+         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem omnis la?</p>
+        </div>
+        <div class="rectangle7">
+          <img src="site.PNG">
+          <h3>Mini site</h3>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis ?</p>
+        </div>
+        <div class="rectangle7">
+         <img src="python.webp">
+         <h3>Projet-Python</h3>
+         <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde aut esse totam.</p>
+        </div>
+        <div class="rectangle7">
+            <img src="groupe.jpg">
+            <h3>Travail de groupe</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut modi omnis oluta illum!</p>
+        </div>
+        <div class="rectangle7">
+          <img src="presen.jpg">
+          <h3>Presentation Aca</h3>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing dita dicta mollitia illum .</p>
+        </div>
+        <div class="rectangle7">
+            <img src="images.jfif">
+            <h3>Apprentissage </h3>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptat, facilis beatae.</p>
+        </div>
+    </div>
+    <div class="rectangle"><h2>Mon profil</h2></div>
+    <div class="rectangle8">
+        <div class="rectangle9"><h3>2026</h3>Année d'Apprentissage </div>
+        <div class="rectangle9"><h3>5+</h3><p>Projets d'apprentissage réalisé</p></div>
+        <div class="rectangle9"><h3>100%</h3><p>Motivation pour apprendre et évoluer</p></div>
+        <div class="rectangle9"><h3>UI</h3><p>Interèt pour le web et le desingn visuel</p></div>
+    </div>
+    <div class="rectangle10">
+    <div class="c">
+         <input type="texte" name="Nom & prénom"
+         placeholder="Entre votre Nom & peénom"><br><br>
+          <input type="texte" name="Email"
+         placeholder="Mettez votre Email"><br><br>
+         <textarea cols="30px" rows="2.9px" placeholder="Mettez votre commentaire...."></textarea><br><br>
+    </div>
+    </div>
+    <div class="cercle">
+        <div class="cercle1"></div>
+        <div class="cercle1"></div>
+        <div class="cercle1"></div>
+        <div class="cercle1"></div>
+    </div>
+    <div class="footer"><p>2026 @Glenn Jeremy - Etudiant ISM/DK</p></div>
+    </div>
+</div>
+</body>
+</html>
